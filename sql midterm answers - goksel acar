@@ -1,0 +1,63 @@
+SQL MIDTERM SINAV CEVAPLARI
+GOKSEL ACAR (gxlacr@gmail.com)
+
+Hocam iyi gunler,
+Asagida midterm icin verdiginiz sorularin cevaplarini bulabilirsiniz. Bazi sorularda yapay zekadan yardim aldim. Verdiginiz emek icin tesekkurler. 
+
+SORU 1 : 
+SQL’de varolan bir veriyi guncellemek icin “UPDATE” komutunu kullaniriz.
+
+SORU 2 : 
+SQL’ de sonuc kumesini siralamak icin “ORDER BY” komutunu kullaniriz. 
+
+SORU 3 : 
+Hasta isimleri ve Sigorta numaralari sorgusu icin :
+SELECT name, insuranceID FROM Patient;
+
+SORU 4 : 
+‘Surgical Attending Phsician’ olarak calisan doktorlarin bilgilerine ulasmak icin : 
+SELECT * FROM Physician
+WHERE Position = 'Surgical Attending Physician';
+
+SORU 5 : 
+Toplam hasta sayisina ulasmak icin :
+SELECT Count (*) as number_of_patients FROM Patient
+
+SORU 6 : 
+Bu soruda her bolumdeki doctor isimleri oncelikli alanlarina (primary affiliation) gore asagidaki gibi sorgulanir: (ACIKCASI BU SORUDAN EMIN OLAMADIM HOCAM)
+SELECT dep.name AS department_name, phy.name AS physician_name, aff.primaryaffiliation AS Prim_Affiliation
+FROM Department dep
+JOIN Affiliated_With aff ON dep.DepartmentID = aff.department
+JOIN Physician phy ON aff.physician = phy.EmployeeID 
+WHERE prim_affiliation = 1
+
+
+SORU 7 : 
+Appointment tablosunda her bir doktora dusen hasta sayisini bulmak icin “appointment” ve “physician” tablolarini JOIN komutuyla baglariz ve asagidaki komutlari yazariz: 
+SELECT p.name AS physician_name, COUNT(a.patient) AS patient_count
+FROM Physician p
+JOIN Appointment a ON p.EmployeeID = a.physician
+GROUP BY p.name;
+
+SORU 8 : 
+Hasta ve doctor isimlerini dahil ederek tum randevulari gostermek istedigimiz bir query yasmak icin asagidaki komutlari kullaniriz:
+SELECT a.appointmentID, pa.name AS patient_name, ph.name AS physician_name
+FROM Appointment a
+JOIN Patient pa ON a.patient = pa.ssn
+JOIN Physician ph ON a.physician = ph.employeeID;
+
+SORU 9 : 
+Birden fazla randevusu olan hastalari bulmak icin patient ve appointment tablolarini baglayip having komutuyla birden buyuk olan randevulari isteriz:
+SELECT pa.name 
+FROM Patient pa
+JOIN Appointment a ON pa.SSN = a.patient
+GROUP BY pa.name
+HAVING COUNT(a.appointmentid) > 1
+
+SORU 10
+Hastalarin recetelerindeki ilaclarin isimlerini ve hangi hastalara yazildigi bilgisini elde etmek icin patients, prescribes, ve medication tablolarini baglayacagiz:
+
+SELECT pa.name as patient_name, med.name as medication_name
+FROM Patient pa
+JOIN Prescribes pre ON pa.SSN = pre.patient
+JOIN Medication med ON  pre.medication = med.code
